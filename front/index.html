@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetQueue - Priority-Based Network Management System</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<h1>NETQUEUE</h1><div class="sub">Priority-Based Network Management System</div>
+<div id="conn" hidden></div>
+<div class="app">
+<div><section class="card"><h2>Packet Generator</h2>
+  <label>Packet ID<input id="pid"></label>
+  <label>Source IP<input id="src" value="192.168.1.5"></label>
+  <label>Destination IP<input id="dst" value="192.168.1.10"></label>
+  <label>Protocol<select id="proto"><option>TCP<option>UDP<option>ICMP</select></label>
+  <label>Size (KB)<input id="size" value="500" inputmode="numeric"></label>
+  <label>Priority (5 = high)<select id="pri"><option>1<option>2<option selected>3<option>4<option>5</select></label>
+  <label>Queue Capacity<select id="cap" onchange="settings()"><option>3<option selected>5<option>10<option>15<option>20</select></label>
+  <label>Scheduling<select id="mode" onchange="settings()"><option>Priority<option>FCFS</select></label>
+  <div id="err"></div>
+  <button onclick="add()">ADD PACKET</button>
+  <button onclick="demo()">GENERATE DEMO PACKETS</button>
+  <button onclick="transmit()">TRANSMIT NEXT PACKET</button>
+  <button id="rst" onclick="reset()">RESET SIMULATION</button>
+  <button onclick="toggleGraphs()">SHOW GRAPHS</button>
+  <label style="margin-top:12px"><span><input type="checkbox" id="anim" checked onchange="render()"> Animation</span>
+   <select id="speed" onchange="render()"><option>Slow<option selected>Normal<option>Fast</select></label>
+</section></div>
+<div>
+ <section class="card"><h2>Current Packet Queue</h2><div class="tbl"><table>
+  <thead><tr><th>Packet ID<th>Source<th>Destination<th>Protocol<th>Size KB<th>Priority<th>Status</thead><tbody id="rows"></tbody></table></div></section>
+ <section class="card"><h2>Network Statistics</h2><div class="stats">
+  <div>Generated: <b id="gen">0</b></div><div>Transmitted: <b id="tx">0</b></div><div>Dropped: <b id="drop">0</b></div>
+  <div>Queue Size: <b id="qs">0</b></div><div>Average Wait: <b id="avg">0.00 sec</b></div><div>Throughput: <b id="thr">0.00 KB/s</b></div></div>
+  <div style="margin-top:10px"><b>Congestion Status:</b> <b id="cong" class="ok">LOW</b></div></section>
+ <section class="card"><h2>Live Queue Animation - <span id="qtitle"></span></h2>
+  <div class="stage" id="stage"><div class="in">Incoming &#9656;</div><div class="slots" id="slots"></div>
+   <div class="node router" id="router">ROUTER</div><div class="link" id="link"><span id="ltxt">idle</span></div><div class="node dest" id="dest">DEST</div></div>
+  <div class="legend">Priority:<b style="background:var(--p1)"></b>1<b style="background:var(--p2)"></b>2<b style="background:var(--p3)"></b>3<b style="background:var(--p4)"></b>4<b style="background:var(--p5)"></b>5<b style="background:var(--bad)"></b>Dropped</div></section>
+ <section class="card"><h2>Transmission Log</h2><pre id="log"></pre></section>
+</div></div>
+<div class="gwin" id="gwin" hidden onclick="if(event.target===this)toggleGraphs()"><div class="gbox">
+ <div class="gbar"><span>NetQueue - Graphs</span><button onclick="toggleGraphs()">CLOSE</button></div>
+ <img id="gimg" alt="Loading graphs...">
+</div></div>
+<script src="app.js"></script></body></html>
